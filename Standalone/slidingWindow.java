@@ -59,4 +59,31 @@ class slidingWindow {
         maxArr[maxArrCounter++] = nums[dq.peekFirst()];
         return maxArr;
     }
+
+    public static int[] minSlidingWindow(int[] nums, int k) {
+        if(nums.length == 0 || k == 0)
+            return new int[]{};
+
+        int[] minArr = new int[nums.length+1-k];
+        int minArrCounter = 0;
+
+        Deque<Integer> dq = new LinkedList<Integer>();
+
+        for(int i=0; i<k; i++){
+            while(!dq.isEmpty() && nums[i] <= nums[dq.peekLast()])
+                dq.removeLast();
+            dq.addLast(i);
+        }
+
+        for(int i=k;i<nums.length;i++){
+            minArr[minArrCounter++] = nums[dq.peekFirst()];
+            while(!dq.isEmpty() && dq.peekFirst() <= i-k)
+                dq.removeFirst();
+            while(!dq.isEmpty() && nums[i] <= nums[dq.peekLast()])
+                dq.removeLast();
+            dq.addLast(i);
+        }
+        minArr[minArrCounter++] = nums[dq.peekFirst()];
+        return minArr;
+    }
 }
